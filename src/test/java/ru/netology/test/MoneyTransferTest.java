@@ -40,8 +40,8 @@ public class MoneyTransferTest {
             val newDashboardPage = MoneyTransferPage.moneyTransfer(sumTransfer, donorCard);
             val getDonorBalance = newDashboardPage.getCardBalance(donorCard);
             val getRecipientBalance = newDashboardPage.getCardBalance(recipientCard);
-            val calculateDonorBalance = DataGenerator.newDonorBalance(getStartBalance1, sumTransfer);
-            val calculateRecipientBalance = DataGenerator.newRecipientBalance(getStartBalance2, sumTransfer);
+            val calculateDonorBalance = DataGenerator.newDonorBalance(getStartBalance1, sumTransfer).getNewBalance();
+            val calculateRecipientBalance = DataGenerator.newRecipientBalance(getStartBalance2, sumTransfer).getNewBalance();
 
             assertEquals(calculateDonorBalance, getDonorBalance);
             assertEquals(calculateRecipientBalance, getRecipientBalance);
@@ -53,8 +53,8 @@ public class MoneyTransferTest {
             val newDashboardPage = MoneyTransferPage.moneyTransfer(sumTransfer, donorCard);
             val getDonorBalance = newDashboardPage.getCardBalance(donorCard);
             val getRecipientBalance = newDashboardPage.getCardBalance(recipientCard);
-            val calculateDonorBalance = DataGenerator.newDonorBalance(getStartBalance2, sumTransfer);
-            val calculateRecipientBalance = DataGenerator.newRecipientBalance(getStartBalance1, sumTransfer);
+            val calculateDonorBalance = DataGenerator.newDonorBalance(getStartBalance2, sumTransfer).getNewBalance();
+            val calculateRecipientBalance = DataGenerator.newRecipientBalance(getStartBalance1, sumTransfer).getNewBalance();
 
             assertEquals(calculateDonorBalance, getDonorBalance);
             assertEquals(calculateRecipientBalance, getRecipientBalance);

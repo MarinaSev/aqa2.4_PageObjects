@@ -1,11 +1,13 @@
 package ru.netology.page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import lombok.val;
 import ru.netology.data.DataGenerator;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -20,7 +22,8 @@ public class DashboardPage {
     }
 
     public int getCardBalance (DataGenerator.CardInfo card) {
-        val text = cards.findBy(attribute("data-test-id", card.getCardId())).getText();
+//        val text = cards.findBy(attribute("data-test-id", card.getCardId())).getText();
+        val text = cards.findBy(text(card.getCardNumber().substring(16,19))).getText();
         return extractBalance(text);
     }
 
@@ -32,7 +35,7 @@ public class DashboardPage {
     }
 
     public MoneyTransferPage goToForm(DataGenerator.CardInfo card) {
-        cards.findBy(attribute("[data-test-id]", card.getCardId())).$(".button").click();
+        cards.findBy(text(card.getCardNumber().substring(16,19))).$(".button").click();
         return new MoneyTransferPage();
     }
 }
