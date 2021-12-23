@@ -17,9 +17,9 @@ public class MoneyTransferPage {
         heading.shouldBe(visible).shouldHave(exactText("Пополнение карты"));
     }
 
-    public static DashboardPage moneyTransfer(String sumTransfer) {
+    public static DashboardPage moneyTransfer(String sumTransfer, DataGenerator.CardInfo card) {
         sumField.setValue(sumTransfer);
-        fromField.setValue(DataGenerator.getCard1().getCard());
+        fromField.setValue(card.getCardNumber());
         toField.shouldBe(visible);
         asseptButtom.click();
         return new DashboardPage();

@@ -30,14 +30,30 @@ public class DataGenerator {
     }
 
     @Value
-    public static class CardNumber {
-        private String card;
+    public static class CardInfo {
+        private String cardNumber;
+        private String cardId;
     }
 
-    public static CardNumber getCard1() {
-        return new CardNumber("5559 0000 0000 0001");
+    public static CardInfo getCard1() {
+        return new CardInfo("5559 0000 0000 0001", "92df3f1c-a033-48e6-8390-206f6b1f56c0");
     }
-    public static CardNumber getCard2() {
-        return new CardNumber("5559 0000 0000 0002");
+    public static CardInfo getCard2() {
+        return new CardInfo("5559 0000 0000 0002", "0f3f5c2a-249e-4c3d-8287-09f7a039391d");
     }
+
+    @Value
+    public static class CalcNewBalance {
+        private int newBalance;
+    }
+
+    public static CalcNewBalance newDonorBalance (int startBalance, String sumTransfer) {
+        return new CalcNewBalance(startBalance - Integer.parseInt(sumTransfer));
+    }
+
+    public static CalcNewBalance newRecipientBalance (int startBalance, String sumTransfer) {
+        return new CalcNewBalance(startBalance + Integer.parseInt(sumTransfer));
+    }
+
+
 }
