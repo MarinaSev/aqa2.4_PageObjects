@@ -47,5 +47,23 @@ public class MoneyTransferTest {
         assertEquals(calculateDonorBalance, getDonorBalance);
         assertEquals(calculateRecipientBalance, getRecipientBalance);
     }
+
+    @Test
+    public void shouldTransferOverSumFrom1To2() {
+        int getStartBalance1 = dashboardPage.getCardBalance(DataGenerator.getCard1());
+        int getStartBalance2 = dashboardPage.getCardBalance(DataGenerator.getCard2());
+        val sumTransfer = DataGenerator.calcOverSum(getStartBalance1).getSumTransfer();
+
+        dashboardPage.goToForm(DataGenerator.getCard2());
+        val newDashboardPage = MoneyTransferPage.moneyTransfer(sumTransfer, DataGenerator.getCard1());
+        //ToDo: вставить проверку сообщения об ошибке, когда баг будет исправлен
+        val getDonorBalance = newDashboardPage.getCardBalance(DataGenerator.getCard1());
+        val getRecipientBalance = newDashboardPage.getCardBalance(DataGenerator.getCard2());
+        val calculateDonorBalance = DataGenerator.newDonorBalance(getStartBalance1, sumTransfer).getNewBalance();
+        val calculateRecipientBalance = DataGenerator.newRecipientBalance(getStartBalance2, sumTransfer).getNewBalance();
+
+        assertEquals(calculateDonorBalance, getDonorBalance);
+        assertEquals(calculateRecipientBalance, getRecipientBalance);
+    }
 }
 

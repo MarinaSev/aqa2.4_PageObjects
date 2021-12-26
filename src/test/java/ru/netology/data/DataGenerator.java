@@ -98,4 +98,13 @@ public class DataGenerator {
     public static CalcNewBalance newRecipientBalance(int startBalance, String sumTransfer) {
         return new CalcNewBalance(startBalance + Integer.parseInt(sumTransfer));
     }
+
+    @Value
+    public static class OverBalanceSum {
+        private String sumTransfer;
+    }
+
+    public static OverBalanceSum calcOverSum(int donorBalance) {
+        return new OverBalanceSum(String.valueOf(donorBalance+200));
+    }
 }
