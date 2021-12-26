@@ -32,14 +32,58 @@ public class DataGenerator {
     @Value
     public static class CardInfo {
         private String cardNumber;
-        private String cardId;
     }
 
     public static CardInfo getCard1() {
-        return new CardInfo("5559 0000 0000 0001", "92df3f1c-a033-48e6-8390-206f6b1f56c0");
+        return new CardInfo("5559 0000 0000 0001");
     }
     public static CardInfo getCard2() {
-        return new CardInfo("5559 0000 0000 0002", "0f3f5c2a-249e-4c3d-8287-09f7a039391d");
+        return new CardInfo("5559 0000 0000 0002");
+    }
+
+    @Value
+    public static class ChooseCardForTransfer {
+        private DataGenerator.CardInfo card;
+    }
+    public static ChooseCardForTransfer donorCard(int startBalance1, int startBalance2) {
+        if(startBalance1 >= startBalance2) {
+            return new ChooseCardForTransfer(DataGenerator.getCard1());
+        } else {
+            return new ChooseCardForTransfer(DataGenerator.getCard2());
+        }
+    }
+
+    public static ChooseCardForTransfer recipientCard(int startBalance1, int startBalance2) {
+        if(startBalance1 >= startBalance2) {
+            return new ChooseCardForTransfer(DataGenerator.getCard2());
+        } else {
+            return new ChooseCardForTransfer(DataGenerator.getCard1());
+        }
+    }
+
+    @Value
+    public static class StartBalance {
+        private int startBalance;
+    }
+
+    public static int donorStartBalance(int startBalance1, int startBalance2) {
+        int donorStartBalance;
+        if(startBalance1 >= startBalance2) {
+            donorStartBalance = startBalance1;
+        } else {
+            donorStartBalance = startBalance2;
+        }
+        return donorStartBalance;
+    }
+
+    public static int recipientStartBalance(int startBalance1, int startBalance2) {
+        int recipientStartBalance;
+        if(startBalance1 >= startBalance2) {
+            recipientStartBalance = startBalance2;
+        } else {
+            recipientStartBalance = startBalance1;
+        }
+        return recipientStartBalance;
     }
 
     @Value
@@ -47,13 +91,11 @@ public class DataGenerator {
         private int newBalance;
     }
 
-    public static CalcNewBalance newDonorBalance (int startBalance, String sumTransfer) {
+    public static CalcNewBalance newDonorBalance(int startBalance, String sumTransfer) {
         return new CalcNewBalance(startBalance - Integer.parseInt(sumTransfer));
     }
 
-    public static CalcNewBalance newRecipientBalance (int startBalance, String sumTransfer) {
+    public static CalcNewBalance newRecipientBalance(int startBalance, String sumTransfer) {
         return new CalcNewBalance(startBalance + Integer.parseInt(sumTransfer));
     }
-
-
 }

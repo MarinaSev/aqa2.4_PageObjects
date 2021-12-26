@@ -1,13 +1,11 @@
 package ru.netology.page;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import lombok.val;
 import ru.netology.data.DataGenerator;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -34,9 +32,27 @@ public class DashboardPage {
         return Integer.parseInt(value);
     }
 
-    public MoneyTransferPage goToForm(DataGenerator.CardInfo card) {
-        cards.findBy(text(card.getCardNumber().substring(16,19))).$(".button").click();
+    public MoneyTransferPage goToForm(DataGenerator.CardInfo recipientCard) {
+        cards.findBy(text(recipientCard.getCardNumber().substring(16,19))).$(".button").click();
         return new MoneyTransferPage();
     }
+
+//    public DataGenerator.CardInfo donorCard(int startBalance1, int startBalance2) {
+//        if(startBalance1 >= startBalance2) {
+//            return DataGenerator.getCard1();
+//        } else {
+//            return DataGenerator.getCard2();
+//        }
+//    }
+//
+//    public DataGenerator.CardInfo recipientCard(int startBalance1, int startBalance2) {
+//        if(startBalance1 >= startBalance2) {
+//            return DataGenerator.getCard2();
+//        } else {
+//            return DataGenerator.getCard1();
+//        }
+//    }
+
+
 }
 
