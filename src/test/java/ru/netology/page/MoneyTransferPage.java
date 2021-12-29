@@ -28,23 +28,21 @@ public class MoneyTransferPage {
         return new DashboardPage();
     }
 
-    public static MoneyTransferPage failedMoneyTransfer(String overSum, DataGenerator.CardInfo card) {
+    public static void failedMoneyTransfer(String overSum, DataGenerator.CardInfo card) {
         sumField.setValue(overSum);
         fromField.setValue(card.getCardNumber());
         toField.shouldBe(visible);
         asseptButtom.click();
         $(withText("Ошибка!")).shouldBe(appear, Duration.ofSeconds(10));
         //ToDo: проверить текст сообщения об ошибке, когда будет исправлен баг
-        return new MoneyTransferPage();
     }
 
-    public static MoneyTransferPage emptyMoneyTransfer(DataGenerator.CardInfo card) {
+    public static void emptyMoneyTransfer(DataGenerator.CardInfo card) {
         fromField.setValue(card.getCardNumber());
         toField.shouldBe(visible);
         asseptButtom.click();
         $(withText("Ошибка!")).shouldBe(appear, Duration.ofSeconds(10));
         //ToDo: проверить текст сообщения об ошибке, когда будет исправлен баг
-        return new MoneyTransferPage();
     }
 }
 
