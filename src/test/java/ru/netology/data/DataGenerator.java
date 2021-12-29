@@ -2,6 +2,8 @@ package ru.netology.data;
 
 import lombok.Value;
 
+import java.util.Random;
+
 public class DataGenerator {
     private DataGenerator() {
     }
@@ -42,48 +44,25 @@ public class DataGenerator {
     }
 
     @Value
-    public static class ChooseCardForTransfer {
-        private DataGenerator.CardInfo card;
-    }
-    public static ChooseCardForTransfer donorCard(int startBalance1, int startBalance2) {
-        if(startBalance1 >= startBalance2) {
-            return new ChooseCardForTransfer(DataGenerator.getCard1());
-        } else {
-            return new ChooseCardForTransfer(DataGenerator.getCard2());
-        }
+    public static class SumTransfer {
+        private int sumTransfer;
     }
 
-    public static ChooseCardForTransfer recipientCard(int startBalance1, int startBalance2) {
-        if(startBalance1 >= startBalance2) {
-            return new ChooseCardForTransfer(DataGenerator.getCard2());
-        } else {
-            return new ChooseCardForTransfer(DataGenerator.getCard1());
-        }
+    public static SumTransfer getSumTransfer (int StartBalance) {
+        int upperBoarder = StartBalance + 1;
+        int bottomBoarder = 1;
+        Random random = new Random();
+        int sumTransfer = random.nextInt(upperBoarder) + bottomBoarder;
+        return new SumTransfer(sumTransfer);
     }
 
     @Value
-    public static class StartBalance {
-        private int startBalance;
+    public static class OverBalanceSum {
+        private int overSum;
     }
 
-    public static int donorStartBalance(int startBalance1, int startBalance2) {
-        int donorStartBalance;
-        if(startBalance1 >= startBalance2) {
-            donorStartBalance = startBalance1;
-        } else {
-            donorStartBalance = startBalance2;
-        }
-        return donorStartBalance;
-    }
-
-    public static int recipientStartBalance(int startBalance1, int startBalance2) {
-        int recipientStartBalance;
-        if(startBalance1 >= startBalance2) {
-            recipientStartBalance = startBalance2;
-        } else {
-            recipientStartBalance = startBalance1;
-        }
-        return recipientStartBalance;
+    public static OverBalanceSum calcOverSum(int donorBalance) {
+        return new OverBalanceSum(donorBalance+200);
     }
 
     @Value
@@ -91,20 +70,11 @@ public class DataGenerator {
         private int newBalance;
     }
 
-    public static CalcNewBalance newDonorBalance(int startBalance, String sumTransfer) {
-        return new CalcNewBalance(startBalance - Integer.parseInt(sumTransfer));
+    public static CalcNewBalance newDonorBalance (int startBalance, int sumTransfer) {
+        return new CalcNewBalance(startBalance - sumTransfer);
     }
 
-    public static CalcNewBalance newRecipientBalance(int startBalance, String sumTransfer) {
-        return new CalcNewBalance(startBalance + Integer.parseInt(sumTransfer));
-    }
-
-    @Value
-    public static class OverBalanceSum {
-        private String sumTransfer;
-    }
-
-    public static OverBalanceSum calcOverSum(int donorBalance) {
-        return new OverBalanceSum(String.valueOf(donorBalance+200));
+    public static CalcNewBalance newRecipientBalance(int startBalance, int sumTransfer) {
+        return new CalcNewBalance(startBalance + sumTransfer);
     }
 }

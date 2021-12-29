@@ -3,7 +3,10 @@ package ru.netology.page;
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.data.DataGenerator;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class MoneyTransferPage {
@@ -23,6 +26,25 @@ public class MoneyTransferPage {
         toField.shouldBe(visible);
         asseptButtom.click();
         return new DashboardPage();
+    }
+
+    public static MoneyTransferPage failedMoneyTransfer(String overSum, DataGenerator.CardInfo card) {
+        sumField.setValue(overSum);
+        fromField.setValue(card.getCardNumber());
+        toField.shouldBe(visible);
+        asseptButtom.click();
+        $(withText("Ошибка!")).shouldBe(appear, Duration.ofSeconds(10));
+        //ToDo: проверить текст сообщения об ошибке, когда будет исправлен баг
+        return new MoneyTransferPage();
+    }
+
+    public static MoneyTransferPage emptyMoneyTransfer(DataGenerator.CardInfo card) {
+        fromField.setValue(card.getCardNumber());
+        toField.shouldBe(visible);
+        asseptButtom.click();
+        $(withText("Ошибка!")).shouldBe(appear, Duration.ofSeconds(10));
+        //ToDo: проверить текст сообщения об ошибке, когда будет исправлен баг
+        return new MoneyTransferPage();
     }
 }
 

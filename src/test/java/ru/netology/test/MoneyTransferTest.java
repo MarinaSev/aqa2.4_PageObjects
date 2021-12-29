@@ -26,44 +26,120 @@ public class MoneyTransferTest {
     }
 
     @Test
-    public void shouldTransferMoneyBetweenCards() {
-        String sumTransfer = "200";
+    public void shouldTransferMoneyFrom1To2() {
         int getStartBalance1 = dashboardPage.getCardBalance(DataGenerator.getCard1());
         int getStartBalance2 = dashboardPage.getCardBalance(DataGenerator.getCard2());
+        val sumTransfer = DataGenerator.getSumTransfer(getStartBalance1).getSumTransfer();
 
-        val donorStartBalance = DataGenerator.donorStartBalance(getStartBalance1, getStartBalance2);
-        val recipientStartBalance = DataGenerator.recipientStartBalance(getStartBalance1, getStartBalance2);
+        dashboardPage.goToForm(DataGenerator.getCard2());
+        val newDashboardPage = MoneyTransferPage.moneyTransfer(String.valueOf(sumTransfer), DataGenerator.getCard1());
 
-        val donorCard = DataGenerator.donorCard(getStartBalance1, getStartBalance2).getCard();
-        val recipientCard= DataGenerator.recipientCard(getStartBalance1, getStartBalance2).getCard();
+        val getNewBalance1 = newDashboardPage.getCardBalance(DataGenerator.getCard1());
+        val getNewBalance2 = newDashboardPage.getCardBalance(DataGenerator.getCard2());
+        val calculateNewBalance1 = DataGenerator.newDonorBalance(getStartBalance1, sumTransfer).getNewBalance();
+        val calculateNewBalance2 = DataGenerator.newRecipientBalance(getStartBalance2, sumTransfer).getNewBalance();
 
-        dashboardPage.goToForm(recipientCard);
-        val newDashboardPage = MoneyTransferPage.moneyTransfer(sumTransfer, donorCard);
-        val getDonorBalance = newDashboardPage.getCardBalance(donorCard);
-        val getRecipientBalance = newDashboardPage.getCardBalance(recipientCard);
-        val calculateDonorBalance = DataGenerator.newDonorBalance(donorStartBalance, sumTransfer).getNewBalance();
-        val calculateRecipientBalance = DataGenerator.newRecipientBalance(recipientStartBalance, sumTransfer).getNewBalance();
+        assertEquals(calculateNewBalance1, getNewBalance1);
+        assertEquals(calculateNewBalance2, getNewBalance2);
+    }
 
-        assertEquals(calculateDonorBalance, getDonorBalance);
-        assertEquals(calculateRecipientBalance, getRecipientBalance);
+    @Test
+    public void shouldTransferMoneyFrom2To1() {
+        int getStartBalance1 = dashboardPage.getCardBalance(DataGenerator.getCard1());
+        int getStartBalance2 = dashboardPage.getCardBalance(DataGenerator.getCard2());
+        val sumTransfer = DataGenerator.getSumTransfer(getStartBalance2).getSumTransfer();
+
+        dashboardPage.goToForm(DataGenerator.getCard1());
+        val newDashboardPage = MoneyTransferPage.moneyTransfer(String.valueOf(sumTransfer), DataGenerator.getCard2());
+
+        val getNewBalance1 = newDashboardPage.getCardBalance(DataGenerator.getCard1());
+        val getNewBalance2 = newDashboardPage.getCardBalance(DataGenerator.getCard2());
+        val calculateNewBalance2 = DataGenerator.newDonorBalance(getStartBalance2, sumTransfer).getNewBalance();
+        val calculateNewBalance1 = DataGenerator.newRecipientBalance(getStartBalance1, sumTransfer).getNewBalance();
+
+        assertEquals(calculateNewBalance2, getNewBalance2);
+        assertEquals(calculateNewBalance1, getNewBalance1);
     }
 
     @Test
     public void shouldTransferOverSumFrom1To2() {
         int getStartBalance1 = dashboardPage.getCardBalance(DataGenerator.getCard1());
-        int getStartBalance2 = dashboardPage.getCardBalance(DataGenerator.getCard2());
-        val sumTransfer = DataGenerator.calcOverSum(getStartBalance1).getSumTransfer();
+        val sumTransfer = DataGenerator.calcOverSum(getStartBalance1).getOverSum();
 
         dashboardPage.goToForm(DataGenerator.getCard2());
-        val newDashboardPage = MoneyTransferPage.moneyTransfer(sumTransfer, DataGenerator.getCard1());
-        //ToDo: вставить проверку сообщения об ошибке, когда баг будет исправлен
-        val getDonorBalance = newDashboardPage.getCardBalance(DataGenerator.getCard1());
-        val getRecipientBalance = newDashboardPage.getCardBalance(DataGenerator.getCard2());
-        val calculateDonorBalance = DataGenerator.newDonorBalance(getStartBalance1, sumTransfer).getNewBalance();
-        val calculateRecipientBalance = DataGenerator.newRecipientBalance(getStartBalance2, sumTransfer).getNewBalance();
-
-        assertEquals(calculateDonorBalance, getDonorBalance);
-        assertEquals(calculateRecipientBalance, getRecipientBalance);
+        MoneyTransferPage.failedMoneyTransfer(String.valueOf(sumTransfer), DataGenerator.getCard1());
     }
+
+    @Test
+    public void shouldTransferOverSumFrom2To1() {
+        int getStartBalance2 = dashboardPage.getCardBalance(DataGenerator.getCard2());
+        val sumTransfer = DataGenerator.calcOverSum(getStartBalance2).getOverSum();
+
+        dashboardPage.goToForm(DataGenerator.getCard1());
+        MoneyTransferPage.failedMoneyTransfer(String.valueOf(sumTransfer), DataGenerator.getCard2());
+    }
+
+    @Test
+    public void shouldTransferNothingFrom1To2() {
+        dashboardPage.goToForm(DataGenerator.getCard2());
+        MoneyTransferPage.emptyMoneyTransfer(DataGenerator.getCard1());
+    }
+
+    @Test
+    public void shouldTransferNothingFrom2To1() {
+        dashboardPage.goToForm(DataGenerator.getCard1());
+        MoneyTransferPage.emptyMoneyTransfer(DataGenerator.getCard2());
+    }
+
+    @Test
+    public void shouldTransferAllSumFrom1To2() {
+        int getStartBalance1 = dashboardPage.getCardBalance(DataGenerator.getCard1());
+        int getStartBalance2 = dashboardPage.getCardBalance(DataGenerator.getCard2());
+        val sumTransfer = getStartBalance1;
+
+        dashboardPage.goToForm(DataGenerator.getCard2());
+        val newDashboardPage = MoneyTransferPage.moneyTransfer(String.valueOf(sumTransfer), DataGenerator.getCard1());
+
+        val getNewBalance1 = newDashboardPage.getCardBalance(DataGenerator.getCard1());
+        val getNewBalance2 = newDashboardPage.getCardBalance(DataGenerator.getCard2());
+        val calculateNewBalance2 = DataGenerator.newRecipientBalance(getStartBalance2, sumTransfer).getNewBalance();
+
+        assertEquals(0, getNewBalance1);
+        assertEquals(calculateNewBalance2, getNewBalance2);
+    }
+
+    @Test
+    public void shouldTransferAllSumFrom2To1() {
+        int getStartBalance1 = dashboardPage.getCardBalance(DataGenerator.getCard1());
+        int getStartBalance2 = dashboardPage.getCardBalance(DataGenerator.getCard2());
+        val sumTransfer = getStartBalance2;
+
+        dashboardPage.goToForm(DataGenerator.getCard1());
+        val newDashboardPage = MoneyTransferPage.moneyTransfer(String.valueOf(sumTransfer), DataGenerator.getCard2());
+
+        val getNewBalance1 = newDashboardPage.getCardBalance(DataGenerator.getCard1());
+        val getNewBalance2 = newDashboardPage.getCardBalance(DataGenerator.getCard2());
+        val calculateNewBalance1 = DataGenerator.newRecipientBalance(getStartBalance1, sumTransfer).getNewBalance();
+
+        assertEquals(0, getNewBalance2);
+        assertEquals(calculateNewBalance1, getNewBalance1);
+    }
+
+    @Test
+    public void shouldTransferNullFrom1To2() {
+        val sumTransfer = 0;
+
+        dashboardPage.goToForm(DataGenerator.getCard2());
+        MoneyTransferPage.failedMoneyTransfer(String.valueOf(sumTransfer), DataGenerator.getCard1());
+    }
+
+    @Test
+    public void shouldTransferNullFrom2To1() {
+        val sumTransfer = 0;
+
+        dashboardPage.goToForm(DataGenerator.getCard1());
+        MoneyTransferPage.failedMoneyTransfer(String.valueOf(sumTransfer), DataGenerator.getCard2());
+    }
+
 }
 

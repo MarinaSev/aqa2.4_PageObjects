@@ -20,7 +20,6 @@ public class DashboardPage {
     }
 
     public int getCardBalance (DataGenerator.CardInfo card) {
-//        val text = cards.findBy(attribute("data-test-id", card.getCardId())).getText();
         val text = cards.findBy(text(card.getCardNumber().substring(16,19))).getText();
         return extractBalance(text);
     }
@@ -36,23 +35,6 @@ public class DashboardPage {
         cards.findBy(text(recipientCard.getCardNumber().substring(16,19))).$(".button").click();
         return new MoneyTransferPage();
     }
-
-//    public DataGenerator.CardInfo donorCard(int startBalance1, int startBalance2) {
-//        if(startBalance1 >= startBalance2) {
-//            return DataGenerator.getCard1();
-//        } else {
-//            return DataGenerator.getCard2();
-//        }
-//    }
-//
-//    public DataGenerator.CardInfo recipientCard(int startBalance1, int startBalance2) {
-//        if(startBalance1 >= startBalance2) {
-//            return DataGenerator.getCard2();
-//        } else {
-//            return DataGenerator.getCard1();
-//        }
-//    }
-
 
 }
 
