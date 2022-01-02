@@ -15,12 +15,14 @@ public class MoneyTransferPage {
     private static SelenideElement fromField = $("[data-test-id='from'] [placeholder='0000 0000 0000 0000']");
     private static SelenideElement toField = $("[data-test-id='to'] [type='text']");
     private static SelenideElement asseptButtom = $("[data-test-id='action-transfer']");
+    private DashboardPage dashboardPage;
+
 
     public MoneyTransferPage() {
         heading.shouldBe(visible).shouldHave(exactText("Пополнение карты"));
     }
 
-    public static DashboardPage moneyTransfer(String sumTransfer, DataGenerator.CardInfo card) {
+    public DashboardPage moneyTransfer(String sumTransfer, DataGenerator.CardInfo card) {
         sumField.setValue(sumTransfer);
         fromField.setValue(card.getCardNumber());
         toField.shouldBe(visible);
@@ -28,20 +30,21 @@ public class MoneyTransferPage {
         return new DashboardPage();
     }
 
-    public static void failedMoneyTransfer(String overSum, DataGenerator.CardInfo card) {
-        sumField.setValue(overSum);
-        fromField.setValue(card.getCardNumber());
-        toField.shouldBe(visible);
-        asseptButtom.click();
-        $(withText("Ошибка!")).shouldBe(appear, Duration.ofSeconds(10));
+    public void failedMoneyTransferError() {
+        $(withText("Ошибка! Суммы на вашем балансе недостаточно для перевода")).shouldBe(appear, Duration.ofSeconds(10));
         //ToDo: проверить текст сообщения об ошибке, когда будет исправлен баг
     }
 
-    public static void emptyMoneyTransfer(DataGenerator.CardInfo card) {
+    public void nullMoneyTransferError() {
+        $(withText("Ошибка! Перевод нулевой суммы невозможен")).shouldBe(appear, Duration.ofSeconds(10));
+        //ToDo: проверить текст сообщения об ошибке, когда будет исправлен баг
+    }
+
+    public void emptyMoneyTransfer(DataGenerator.CardInfo card) {
         fromField.setValue(card.getCardNumber());
         toField.shouldBe(visible);
         asseptButtom.click();
-        $(withText("Ошибка!")).shouldBe(appear, Duration.ofSeconds(10));
+        $(withText("Ошибка! Необходимо указать сумму перевода")).shouldBe(appear, Duration.ofSeconds(10));
         //ToDo: проверить текст сообщения об ошибке, когда будет исправлен баг
     }
 }
